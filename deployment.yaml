@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver
+  namespace: apache
+  labels:
+    name: apache
+spec:
+ selector:
+   matchLabels:
+     name: apache
+ replicas: 1
+ template:
+   metadata:
+     labels:
+       name: apache
+   spec:
+     containers:
+     - image: httpd:2.4.54
+       name: webserver
+       ports:
+         - containerPort: 80
+           name: apache
+       volumeMounts:
+       - name: www-persistent-storage
+         mountPath: /usr/local/apache2/htdocs
+     volumes:
+       - name: www-persistent-storage
+         persistentVolumeClaim:
+          claimName: apache-claim
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-service
+  namespace: apache
+spec:
+  type: NodePort
+  selector:
+    name: webserver
+  ports:
+  - nodePort: 31015
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+

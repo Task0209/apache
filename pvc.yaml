@@ -1,0 +1,13 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: apache-claim
+  namespace: apache
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: my-local-storage
+  resources:
+    requests:
+      storage: 0.5Gi
+

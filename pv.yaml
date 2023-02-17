@@ -1,0 +1,22 @@
+kind: PersistentVolume
+metadata:
+  name: apache-pv
+  namespace: apache
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: my-local-storage
+  local:
+    path: /usr/local/apache2/htdocs
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - slave1
+
